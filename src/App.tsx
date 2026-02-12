@@ -1,34 +1,34 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
+
 import './App.css'
+import { useDropSocket } from './hooks/useDrops'
+import DashboardDrops from './features/dashboard/DashboardDrops'
+import { Suspense } from 'react'
+import type { IDrop } from './types/types';
+
+type PromiseProps = {
+  data: IDrop[],
+  success: boolean,
+  message: string
+} 
+
+const fetchDrops = async (): Promise<PromiseProps> => {
+  const res = await fetch(`${import.meta.env.VITE_API_URL}/api/v1/drops`);
+
+  if (!res.ok) {
+    throw new Error("Failed to fetch users");
+  }
+
+  return res.json();
+}
+
 
 function App() {
-  const [count, setCount] = useState(0)
-
+  useDropSocket()
+  const getDropsData = fetchDrops()
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
+    <Suspense fallback={<>Loading...</>}>
+      <DashboardDrops getDropsData={getDropsData} />
+    </Suspense>
   )
 }
 
