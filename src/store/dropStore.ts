@@ -1,4 +1,5 @@
 
+import { toast } from 'sonner';
 import type { IDrop } from '../types/types';
 import { create } from 'zustand';
 import { immer } from 'zustand/middleware/immer';
@@ -19,18 +20,22 @@ export const useDropStore = create<DropSlice>()(
       state.drops = drops;
     }),
     
-    addNewDrop: (newDrop: IDrop) => 
+    addNewDrop: (newDrop: IDrop) =>
       set((state) => {
         if (!state.drops) {
           state.drops = [newDrop];
         } else {
           state.drops.push(newDrop);
         }
+        toast.info(`New drop of ${newDrop.name} available with ${newDrop.available_stock} items.`)
       }),
     
     updateStock: (dropId: number, available_stock: number) => 
       set((state) => {
         const drop = state.drops?.find((item: IDrop) => item.id === dropId);
+        if(drop && drop?.available_stock < available_stock){
+          toast.info(`Stock updated for the drop ${drop.name}, current stock ${drop.available_stock} items.`)
+        }
         if (drop) {
           drop.available_stock = available_stock;
         }

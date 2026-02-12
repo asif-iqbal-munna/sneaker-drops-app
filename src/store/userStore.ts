@@ -1,8 +1,9 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
+import type { IUser } from '../types/types';
 
 interface UserSlice {
-  user: { id: string; name: string } | null;
+  user: IUser | null;
   setUser: (user: UserSlice['user']) => void;
   clearUser: () => void;
 }
