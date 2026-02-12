@@ -15,6 +15,9 @@ const DropReserve = ({ drop }: { drop: IDrop}) => {
   const handleReservation = async () =>{
     try {
       setIsPending(true)
+      if(!user?.id){
+        toast.error("Please select a user. Seed user using seed command in backend.")
+      }
       const response = await fetch(`${import.meta.env.VITE_API_URL}/api/v1/reservations/${user?.id}/${drop.id}`, {
         method: 'POST',
         headers: {
