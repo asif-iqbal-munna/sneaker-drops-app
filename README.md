@@ -4,6 +4,44 @@ This project is a complete sneaker drop platform. It supports instant and schedu
 
 ---
 
+## How to Run the App with SQL Schema Setup
+
+Steps to run the app discussed briefly and given detailed commands below this section.
+
+1. **Backend SQL schema setup and start**
+   - Clone the backend repository and install dependencies.
+   - Configure `.env` with PostgreSQL and Redis values.
+   - Run `npm run migrate:up` to create the SQL schema via migrations.
+   - Run `npm run seed:up` to populate initial data, then `npm run dev` to start the backend.
+
+2. **Frontend start**
+   - Clone the frontend repository and install dependencies.
+   - Run `npm run dev` in the frontend folder.
+   - Open the shown URL in your browser to use the application.
+
+---
+
+## 60-Second Expiration Logic
+
+Implemented 60 seconds expiration logic using BullMQ and Redis.
+
+- When a user reserves an item, the backend creates a reservation.
+- Then, it createss a delayed BullMQ job with 60 seconds delay.
+- When the job runs, it checks if the reservation is still completed or not.
+- If not confirmed, the job make the reservation as expired and increase the stock count and emit the event for real time update.
+
+---
+
+## Prevent Multiple Users from Claiming the Same Last Item
+
+Using database row locking to prevent overselling.
+
+- Using transaction to lock the row so that until transaction commit other get loading.
+- It decrements available_stock only if the current value is greater than zero and emit the event for real time stock update.
+- As stock is decremented when two users try reserve last item, one user can reserve the last item and the other user sees zero in stock immediately.
+
+---
+
 ## Overview
 
 - **Backend**: Node.js, Express, BullMQ (job queue), Redis (queue), PostgreSQL, Zod (validation).
