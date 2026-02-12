@@ -8,6 +8,28 @@ export interface IDrop {
   drops_date?: Date | null;
   status: "draft" | "scheduled" | "live" | "cancelled";
 
+  Purchases?: IPurchase[],
+
+  createdAt?: Date;
+  updatedAt?: Date;
+}
+
+export interface IPurchase {
+  id?: number;
+  uuid?: string;
+  drop_id: number;
+  user_id: number;
+  User?: IUser
+
+  createdAt?: Date;
+  updatedAt?: Date;
+}
+
+export interface IReservation {
+  id: number;
+  uuid: string;
+  user_id: string;
+  drop_id: string;
   createdAt?: Date;
   updatedAt?: Date;
 }
@@ -28,7 +50,7 @@ export type DropEvent =
     }
   | {
       type: "stock";
-      payload: { dropId: number; available: number };
+      payload: { dropId: number; userId: number; available: number };
     }
   | {
       type: "purchase";

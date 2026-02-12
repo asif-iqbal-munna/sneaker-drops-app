@@ -1,5 +1,5 @@
 import { use, useEffect } from "react";
-import DropCard from "../../DropCard";
+import DropCard from "./DropCard";
 import type { IDrop } from "../../types/types";
 import { Card, CardContent } from "../../components/ui/card";
 import { useDropStore } from "../../store/dropStore";
@@ -14,8 +14,6 @@ const DashboardDrops = ({ getDropsData }: Props) => {
   const drops = useDropStore(state => state.drops) || []
   const setDrops = useDropStore(state => state.setDrops) || []
 
-  console.log({dropsData})
-  
   useEffect(() => {
     setDrops(dropsData)
   }, [dropsData])

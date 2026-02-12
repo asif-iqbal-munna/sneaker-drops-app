@@ -15,8 +15,8 @@ export const useDropSocket = () => {
           break;
 
         case "stock": { 
-          const { dropId, available } = event.payload
-          updateStock(dropId, available)
+          const { dropId, available, userId } = event.payload
+          updateStock(dropId, userId, available)
           break; 
         }
         
